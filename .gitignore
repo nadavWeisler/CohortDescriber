@@ -1,0 +1,66 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Packaging / build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Test / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.mypy_cache/
+.ruff_cache/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# IDEs / editors
+.vscode/
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log
+
+# --- Project outputs ---
+# DuckDB databases
+*.duckdb
+*.duckdb-wal
+
+# Reports / exports
+report.md
+reports/
+output/
+exports/
+
+# Raw / generated data (keep sample CSV if you want tracked)
+data/
+*.parquet
+*.csv
+
+# If you WANT to track people_sample.csv, unignore it:
+# !people_sample.csv
+
+# Secrets / configs (keep a template tracked instead)
+config/db.yml
+config/*.secret.*
+*.env
+.env.*

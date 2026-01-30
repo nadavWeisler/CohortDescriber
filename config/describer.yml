@@ -1,0 +1,15 @@
+table_prefix: raw_input
+id_col: id
+
+ingest:
+  mapping: {}          # optional
+  date_columns: []     # optional
+  dtypes: {}           # optional
+
+metrics:
+  - name: n
+    type: count
+
+checks:
+  - type: duplicates
+    cols: [id]
