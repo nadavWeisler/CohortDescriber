@@ -1,3 +1,7 @@
+"""Initialize and check the database schema."""
+
+from __future__ import annotations
+
 from cohort_describer.duckdb import DuckDBDB
 
 db = DuckDBDB("cohort.duckdb")

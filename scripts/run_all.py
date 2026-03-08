@@ -13,7 +13,7 @@ db = DuckDBDB("cohort.duckdb")
 db.execute_file("sql/schema.sql")
 
 INPUT_PATH = "data/customers_test.csv"
-run_id = make_run_id("customers")   # e.g. customers_20260130_142233
+run_id = make_run_id("customers")
 
 raw_table, n = ingest(
     db,

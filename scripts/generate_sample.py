@@ -1,3 +1,5 @@
+"""Generate a sample customer dataset with controlled characteristics."""
+
 from __future__ import annotations
 
 from datetime import date, timedelta
@@ -14,6 +16,8 @@ def main(
     missing_birth_rate: float = 0.03,
     missing_last_purchase_rate: float = 0.08,
 ) -> None:
+    """Generate a sample customer dataset with controlled characteristics."""
+
     rng = np.random.default_rng(seed)
     out_path = Path(out_dir)
     out_path.mkdir(parents=True, exist_ok=True)
@@ -39,10 +43,22 @@ def main(
     last_purchase_dates = [lp_start + timedelta(days=int(d)) for d in lp_days]
 
     sectors = ["retail", "b2b", "health", "finance", "gaming"]
-    marketing_sector = rng.choice(sectors, size=n, p=[0.35, 0.20, 0.15, 0.15, 0.15]).tolist()
+    marketing_sector = rng.choice(
+        sectors, size=n, p=[0.35, 0.20, 0.15, 0.15, 0.15]
+    ).tolist()
 
-    items = ["subscription", "bundle", "single_item", "upgrade", "gift_card", "addon", "service_fee"]
-    last_purchase_item = rng.choice(items, size=n, p=[0.18, 0.12, 0.35, 0.10, 0.08, 0.12, 0.05]).tolist()
+    items = [
+        "subscription",
+        "bundle",
+        "single_item",
+        "upgrade",
+        "gift_card",
+        "addon",
+        "service_fee",
+    ]
+    last_purchase_item = rng.choice(
+        items, size=n, p=[0.18, 0.12, 0.35, 0.10, 0.08, 0.12, 0.05]
+    ).tolist()
 
     df = pl.DataFrame(
         {
@@ -64,11 +80,18 @@ def main(
     # Missingness masks as Polars boolean Series
     if missing_birth_rate > 0:
         m = pl.Series(rng.random(n) < missing_birth_rate)
-        df = df.with_columns(pl.when(m).then(None).otherwise(pl.col("birth_date")).alias("birth_date"))
+        df = df.with_columns(
+            pl.when(m).then(None).otherwise(pl.col("birth_date")).alias("birth_date")
+        )
 
     if missing_last_purchase_rate > 0:
         m = pl.Series(rng.random(n) < missing_last_purchase_rate)
-        df = df.with_columns(pl.when(m).then(None).otherwise(pl.col("last_purchase_date")).alias("last_purchase_date"))
+        df = df.with_columns(
+            pl.when(m)
+            .then(None)
+            .otherwise(pl.col("last_purchase_date"))
+            .alias("last_purchase_date")
+        )
 
     # Re-cast after injecting nulls (keeps Date dtype)
     df = df.with_columns(
