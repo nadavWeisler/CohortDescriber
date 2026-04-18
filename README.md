@@ -6,7 +6,7 @@ Simple pipeline for describing a dataset with:
 - data-quality checks
 - a markdown report
 
-Tags: cohort, duckdb, data quality, analytics, reporting.
+Tags: cohort, duckdb, data-quality, metrics, reporting.
 
 ## What this project contains
 
