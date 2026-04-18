@@ -6,6 +6,8 @@ Simple pipeline for describing a dataset with:
 - data-quality checks
 - a markdown report
 
+Keywords: `cohort`, `duckdb`, `data-quality`, `metrics`, `reporting`.
+
 ## What this project contains
 
 - `config/describer.yml` – pipeline configuration (id column, metric specs, checks, optional ingest mapping/casts)

@@ -5,6 +5,8 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "cohort-describer"
 version = "0.1.0"
+description = "Simple pipeline for ingesting data into DuckDB, running metrics and quality checks, and generating markdown reports."
+keywords = ["cohort", "duckdb", "data-quality", "metrics", "reporting"]
 requires-python = ">=3.10"
 
 [tool.setuptools]
