@@ -65,7 +65,11 @@ def ingest(db: DuckDBDB, input_path: str, cfg, spec: IngestSpec) -> tuple[str, i
         df = df.rename(mapping)
 
     required_columns = [cfg.id_col, *date_cols, *dtypes.keys(), *(cfg.group_by or [])]
-    _validate_columns_exist(df, list(dict.fromkeys(required_columns)), "config")
+    _validate_columns_exist(
+        df,
+        list(dict.fromkeys(required_columns)),
+        "config after applying ingest.mapping",
+    )
 
     if cfg.id_col not in df.columns:
         raise ValueError(

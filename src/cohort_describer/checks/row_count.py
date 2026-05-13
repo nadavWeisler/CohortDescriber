@@ -11,9 +11,15 @@ def _validate_row_count_check(spec: dict) -> None:
     if "min" not in spec and "max" not in spec:
         raise ValueError("row_count check requires at least one of 'min' or 'max'")
     if "min" in spec:
-        int(spec["min"])
+        try:
+            int(spec["min"])
+        except (TypeError, ValueError) as exc:
+            raise ValueError("row_count check requires integer-like 'min'") from exc
     if "max" in spec:
-        int(spec["max"])
+        try:
+            int(spec["max"])
+        except (TypeError, ValueError) as exc:
+            raise ValueError("row_count check requires integer-like 'max'") from exc
 
 
 def check_row_count(df: pl.DataFrame, spec: dict, context: CheckContext) -> CheckResult:

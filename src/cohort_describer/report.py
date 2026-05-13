@@ -21,7 +21,7 @@ def _md_table(df: pl.DataFrame, max_rows: int = 50) -> str:
     cols = df2.columns
     rows = df2.rows()
 
-    str_rows = [[str(v) for v in r] for r in rows]
+    str_rows = [[("" if v is None else str(v)) for v in r] for r in rows]
 
     widths = [len(c) for c in cols]
     for r in str_rows:
@@ -63,12 +63,16 @@ def _column_summary(df: pl.DataFrame) -> pl.DataFrame:
 def _prepare_failed_checks(failed: pl.DataFrame) -> pl.DataFrame:
     if failed.height == 0:
         return failed
+
+    def _format_json_details(value: str) -> str:
+        try:
+            return json.dumps(json.loads(value), ensure_ascii=False, indent=2)
+        except json.JSONDecodeError:
+            return value
+
     return failed.with_columns(
         pl.col("details_json")
-        .map_elements(
-            lambda value: json.dumps(json.loads(value), ensure_ascii=False, indent=2),
-            return_dtype=pl.Utf8,
-        )
+        .map_elements(_format_json_details, return_dtype=pl.Utf8)
         .alias("details")
     ).drop("details_json")
 

@@ -9,7 +9,10 @@ from .registry import register_check, CheckContext, CheckResult
 def _validate_missing_rate_check(spec: dict) -> None:
     if not isinstance(spec["column"], str) or not spec["column"]:
         raise ValueError("missing_rate check requires a non-empty 'column'")
-    float(spec["max"])
+    try:
+        float(spec["max"])
+    except (TypeError, ValueError) as exc:
+        raise ValueError("missing_rate check requires numeric 'max'") from exc
 
 
 def check_missing_rate(

@@ -47,6 +47,7 @@ metrics:
 checks:
   - type: unique
     cols: [id]
+  # Intentionally excludes "gaming" so the smoke test exercises failed checks/reporting.
   - type: accepted_values
     column: marketing_sector
     values: [retail, finance]
