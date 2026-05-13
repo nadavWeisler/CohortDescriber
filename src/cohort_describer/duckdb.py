@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any, Sequence
 import duckdb
 import polars as pl
+
+from cohort_describer.utils import quote_identifier
 
 
 class DuckDBDB:
@@ -25,9 +28,12 @@ class DuckDBDB:
         """Close the database connection."""
         self.con.close()
 
-    def execute(self, sql: str) -> None:
+    def execute(self, sql: str, params: Sequence[Any] | None = None) -> None:
         """Execute a SQL statement."""
-        self.con.execute(sql)
+        if params is None:
+            self.con.execute(sql)
+        else:
+            self.con.execute(sql, params)
 
     def execute_file(self, path: str) -> None:
         """Execute SQL statements from a .sql file."""
@@ -42,13 +48,19 @@ class DuckDBDB:
 
         self.con.register("tmp_df", df.to_arrow())
 
+        table_name = quote_identifier(table)
+
         if mode == "replace":
-            self.con.execute(f"CREATE OR REPLACE TABLE {table} AS SELECT * FROM tmp_df")
+            self.con.execute(f"CREATE OR REPLACE TABLE {table_name} AS SELECT * FROM tmp_df")
         else:
-            self.con.execute(f"INSERT INTO {table} SELECT * FROM tmp_df")
+            self.con.execute(f"INSERT INTO {table_name} SELECT * FROM tmp_df")
 
         self.con.unregister("tmp_df")
 
-    def read_df(self, sql: str) -> pl.DataFrame:
+    def read_df(self, sql: str, params: Sequence[Any] | None = None) -> pl.DataFrame:
         """Read a Polars DataFrame from a SQL query."""
-        return pl.from_arrow(self.con.execute(sql).arrow())
+        if params is None:
+            result = self.con.execute(sql)
+        else:
+            result = self.con.execute(sql, params)
+        return pl.from_arrow(result.arrow())
