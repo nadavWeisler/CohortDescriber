@@ -10,11 +10,11 @@ Keywords: `cohort`, `duckdb`, `data-quality`, `metrics`, `reporting`.
 
 ## What this project contains
 
-- `/home/runner/work/CohortDescriber/CohortDescriber/config/describer.yml` – validated pipeline configuration
-- `/home/runner/work/CohortDescriber/CohortDescriber/sql/schema.sql` – database schema
-- `/home/runner/work/CohortDescriber/CohortDescriber/scripts/generate_sample.py` – generates sample input data
-- `/home/runner/work/CohortDescriber/CohortDescriber/src/cohort_describer/cli.py` – CLI entrypoint
-- `/home/runner/work/CohortDescriber/CohortDescriber/src/cohort_describer/` – core implementation
+- `config/describer.yml` – validated pipeline configuration
+- `sql/schema.sql` – database schema
+- `scripts/generate_sample.py` – generates sample input data
+- `src/cohort_describer/cli.py` – CLI entrypoint
+- `src/cohort_describer/` – core implementation
 
 ## Quick start
 
@@ -71,7 +71,7 @@ PYTHONPATH=src python scripts/run_report.py
 
 ## Configuration
 
-Main config file: `/home/runner/work/CohortDescriber/CohortDescriber/config/describer.yml`
+Main config file: `config/describer.yml`
 
 Current keys:
 - `table_prefix`
