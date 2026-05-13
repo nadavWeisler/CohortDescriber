@@ -16,7 +16,7 @@ def _validate_missing_rate_check(spec: dict) -> None:
 
 
 def check_missing_rate(
-    df: pl.DataFrame, spec: dict, context: CheckContext
+    df: pl.DataFrame, spec: dict, _context: CheckContext
 ) -> CheckResult:
     """
     Check for missing value rate in a specified column of the DataFrame.
@@ -26,7 +26,6 @@ def check_missing_rate(
     Returns:
         A tuple of (check_name, passed: bool, details: dict)
     """
-    del context
     col = spec["column"]
     max_rate = float(spec["max"])
     null_rate = df.select(pl.col(col).is_null().mean()).item()

@@ -13,10 +13,9 @@ def _validate_range_check(spec: dict) -> None:
         raise ValueError("range check requires at least one of 'min' or 'max'")
 
 
-def check_range(df: pl.DataFrame, spec: dict, context: CheckContext) -> CheckResult:
+def check_range(df: pl.DataFrame, spec: dict, _context: CheckContext) -> CheckResult:
     """Check that all values in a specified column are within a given range."""
 
-    del context
     col = spec["column"]
     lo = spec.get("min", None)
     hi = spec.get("max", None)

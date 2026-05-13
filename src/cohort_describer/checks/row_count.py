@@ -22,9 +22,8 @@ def _validate_row_count_check(spec: dict) -> None:
             raise ValueError("row_count check requires integer-like 'max'") from exc
 
 
-def check_row_count(df: pl.DataFrame, spec: dict, context: CheckContext) -> CheckResult:
+def check_row_count(df: pl.DataFrame, spec: dict, _context: CheckContext) -> CheckResult:
     """Check that row count falls within configured thresholds."""
-    del context
     n_rows = df.height
     min_rows = int(spec["min"]) if "min" in spec else None
     max_rows = int(spec["max"]) if "max" in spec else None

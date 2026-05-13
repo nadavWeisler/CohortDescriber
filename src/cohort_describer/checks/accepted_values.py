@@ -16,10 +16,9 @@ def _validate_accepted_values_check(spec: dict) -> None:
 
 
 def check_accepted_values(
-    df: pl.DataFrame, spec: dict, context: CheckContext
+    df: pl.DataFrame, spec: dict, _context: CheckContext
 ) -> CheckResult:
     """Check whether non-null values in a column are contained in an allowed set."""
-    del context
     column = spec["column"]
     values = spec["values"]
     allow_null = bool(spec.get("allow_null", True))

@@ -13,7 +13,7 @@ def _validate_duplicates_check(spec: dict) -> None:
 
 
 def check_duplicates(
-    df: pl.DataFrame, spec: dict, context: CheckContext
+    df: pl.DataFrame, spec: dict, _context: CheckContext
 ) -> CheckResult:
     """
     Check for duplicate rows based on specified columns.
@@ -25,7 +25,6 @@ def check_duplicates(
     Returns:
         CheckResult: A tuple containing the check name, a boolean indicating if the check passed, and a dictionary with details.
     """
-    del context
     cols = spec["cols"]
     n_rows = df.height
     n_unique = df.select(pl.struct(cols).n_unique()).item()

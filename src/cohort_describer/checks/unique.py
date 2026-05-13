@@ -13,9 +13,8 @@ def _validate_unique_check(spec: dict) -> None:
         raise ValueError("unique check requires a non-empty list[str] in 'cols'")
 
 
-def check_unique(df: pl.DataFrame, spec: dict, context: CheckContext) -> CheckResult:
+def check_unique(df: pl.DataFrame, spec: dict, _context: CheckContext) -> CheckResult:
     """Check that a combination of columns is unique."""
-    del context
     cols = spec["cols"]
     duplicates = df.group_by(cols).len().filter(pl.col("len") > 1)
     duplicate_groups = duplicates.height
