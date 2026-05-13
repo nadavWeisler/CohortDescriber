@@ -15,6 +15,16 @@ CREATE TABLE
     );
 
 CREATE TABLE
+    IF NOT EXISTS dataset_metric_groups (
+        run_id VARCHAR,
+        group_name VARCHAR,
+        group_value VARCHAR,
+        metric VARCHAR,
+        value DOUBLE,
+        n INTEGER
+    );
+
+CREATE TABLE
     IF NOT EXISTS checks (
         run_id VARCHAR,
         check_name VARCHAR,

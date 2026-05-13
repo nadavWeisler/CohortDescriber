@@ -1,23 +1,13 @@
-"""Ingest data into DuckDB for cohort describer."""
+"""Ingest sample data into DuckDB for cohort describer."""
 
-from cohort_describer.duckdb import DuckDBDB
-from cohort_describer.config import load_config
-from cohort_describer.ingest import ingest, IngestSpec
+from cohort_describer.pipeline import ingest_step
 
-cfg = load_config("config/describer.yml")
-db = DuckDBDB("cohort.duckdb")
-db.execute_file("sql/schema.sql")
 
-run_id = "r1"
-input_path = "data/customers_test.csv"  # or your file
-
-raw_table, n = ingest(
-    db=db,
-    input_path=input_path,
-    cfg=cfg,
-    spec=IngestSpec(run_id=run_id, dataset_name=input_path, source="local"),
-)
-
-print("ingested rows:", (raw_table, n))
-print(db.read_df(f"SELECT run_id, COUNT(*) AS n FROM {raw_table} GROUP BY run_id"))
-print(db.read_df("SELECT * FROM dataset_runs ORDER BY created_at DESC LIMIT 5"))
+if __name__ == "__main__":
+    run_id, raw_table, n = ingest_step(
+        "data/customers_test.csv",
+        run_id="r1",
+        dataset_name="data/customers_test.csv",
+        source="local",
+    )
+    print("ingested rows:", (run_id, raw_table, n))

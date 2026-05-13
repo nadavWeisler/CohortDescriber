@@ -1,11 +1,8 @@
-from cohort_describer.duckdb import DuckDBDB
-from cohort_describer.config import load_config
-from cohort_describer.report import generate_report
+"""Generate report artifacts for the default example run."""
 
-cfg = load_config("config/describer.yml")
-db = DuckDBDB("cohort.duckdb")
+from cohort_describer.pipeline import report_step
 
-run_id = "r1"  # or None for latest
-generate_report(db, table=cfg.table, out_path="report.md", run_id=run_id)
 
-print("Wrote report.md")
+if __name__ == "__main__":
+    report_step(run_id="r1", out_base="report", formats=("md", "json", "csv"))
+    print("Wrote report artifacts")

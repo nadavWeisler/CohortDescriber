@@ -59,6 +59,8 @@ def main(
     last_purchase_item = rng.choice(
         items, size=n, p=[0.18, 0.12, 0.35, 0.10, 0.08, 0.12, 0.05]
     ).tolist()
+    purchase_count = rng.integers(1, 25, size=n).tolist()
+    lifetime_value = np.round(rng.lognormal(mean=4.0, sigma=0.45, size=n), 2).tolist()
 
     df = pl.DataFrame(
         {
@@ -67,6 +69,8 @@ def main(
             "marketing_sector": marketing_sector,
             "last_purchase_date": last_purchase_dates,
             "last_purchase_item": last_purchase_item,
+            "purchase_count": purchase_count,
+            "lifetime_value": lifetime_value,
         }
     ).with_columns(
         # Force stable dtypes (prevents Object)
@@ -75,6 +79,8 @@ def main(
         pl.col("last_purchase_item").cast(pl.Utf8),
         pl.col("birth_date").cast(pl.Date, strict=False),
         pl.col("last_purchase_date").cast(pl.Date, strict=False),
+        pl.col("purchase_count").cast(pl.Int64, strict=False),
+        pl.col("lifetime_value").cast(pl.Float64, strict=False),
     )
 
     # Missingness masks as Polars boolean Series

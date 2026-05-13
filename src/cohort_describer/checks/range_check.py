@@ -3,10 +3,17 @@
 from __future__ import annotations
 import polars as pl
 
-from .registry import register_check, CheckResult
+from .registry import register_check, CheckContext, CheckResult
 
 
-def check_range(df: pl.DataFrame, spec: dict) -> CheckResult:
+def _validate_range_check(spec: dict) -> None:
+    if not isinstance(spec["column"], str) or not spec["column"]:
+        raise ValueError("range check requires a non-empty 'column'")
+    if "min" not in spec and "max" not in spec:
+        raise ValueError("range check requires at least one of 'min' or 'max'")
+
+
+def check_range(df: pl.DataFrame, spec: dict, _context: CheckContext) -> CheckResult:
     """Check that all values in a specified column are within a given range."""
 
     col = spec["column"]
@@ -33,4 +40,9 @@ def check_range(df: pl.DataFrame, spec: dict) -> CheckResult:
     )
 
 
-register_check("range", check_range)
+register_check(
+    "range",
+    check_range,
+    required_keys=("column",),
+    validator=_validate_range_check,
+)

@@ -3,10 +3,21 @@
 from __future__ import annotations
 import polars as pl
 
-from .registry import register_check, CheckResult
+from .registry import register_check, CheckContext, CheckResult
 
 
-def check_missing_rate(df: pl.DataFrame, spec: dict) -> CheckResult:
+def _validate_missing_rate_check(spec: dict) -> None:
+    if not isinstance(spec["column"], str) or not spec["column"]:
+        raise ValueError("missing_rate check requires a non-empty 'column'")
+    try:
+        float(spec["max"])
+    except (TypeError, ValueError) as exc:
+        raise ValueError("missing_rate check requires numeric 'max'") from exc
+
+
+def check_missing_rate(
+    df: pl.DataFrame, spec: dict, _context: CheckContext
+) -> CheckResult:
     """
     Check for missing value rate in a specified column of the DataFrame.
     Args:
@@ -26,4 +37,9 @@ def check_missing_rate(df: pl.DataFrame, spec: dict) -> CheckResult:
     )
 
 
-register_check("missing_rate", check_missing_rate)
+register_check(
+    "missing_rate",
+    check_missing_rate,
+    required_keys=("column", "max"),
+    validator=_validate_missing_rate_check,
+)

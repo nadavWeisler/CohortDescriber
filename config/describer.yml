@@ -1,15 +1,50 @@
 table_prefix: raw_input
 id_col: id
 
+group_by:
+  - marketing_sector
+
 ingest:
-  mapping: {}          # optional
-  date_columns: []     # optional
-  dtypes: {}           # optional
+  mapping: {}
+  date_columns:
+    - birth_date
+    - last_purchase_date
+  dtypes:
+    purchase_count: int
+    lifetime_value: float
 
 metrics:
   - name: n
     type: count
+  - name: distinct_ids
+    type: n_unique
+    column: id
+  - name: avg_purchase_count
+    type: mean
+    column: purchase_count
+  - name: total_lifetime_value
+    type: sum
+    column: lifetime_value
+  - name: p90_lifetime_value
+    type: quantile
+    column: lifetime_value
+    q: 0.9
+  - name: missing_birth_date_rate
+    type: missing_rate
+    column: birth_date
 
 checks:
-  - type: duplicates
+  - type: unique
     cols: [id]
+  - type: missing_rate
+    column: last_purchase_date
+    max: 0.1
+  - type: accepted_values
+    column: marketing_sector
+    values: [retail, b2b, health, finance, gaming]
+  - type: range
+    column: purchase_count
+    min: 1
+    max: 30
+  - type: row_count
+    min: 100
